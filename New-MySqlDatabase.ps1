@@ -47,7 +47,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 #region Set script variable
 
-[string]$strLoglevel = "DEBUG" # ERROR / WARNING / INFO / DEBUG / NONE
+[string]$strLoglevel = "INFO" # ERROR / WARNING / INFO / DEBUG / NONE
 [boolean]$blnLogToConsole = $true
 [boolean]$blnLogToFile = $true
 [string]$strLogfile = "$strScriptDirectory\$($strScriptName.Replace('.ps1','.log'))"
