@@ -33,7 +33,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 [boolean]$blnCreditShow = $true
 [string]$strCreditName = $strScriptName
-[string]$strCreditCompany = 'Nationale Politie'
+[string]$strCreditCompany = 'Host Your IT'
 [string]$strCreditAuthor = 'Roeland van den Bosch'
 [string]$strCreditDate = '2017-02-19'
 [string]$strCreditVersion = '0.1'
