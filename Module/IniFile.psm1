@@ -22,8 +22,8 @@ Function Read-IniFile
     Gets the content of 'C:\Windows\win.ini'.
   .Parameter FilePath
     File path of the ini file.
-  .Parameter LogValue
-    Object of constant log values.
+  .Parameter Log
+    Array of constant log values.
   .Inputs
     [string]
     [object]

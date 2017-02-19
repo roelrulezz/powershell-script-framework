@@ -7,7 +7,7 @@
 Param(
   [Parameter(Mandatory=$false, Position=0, HelpMessage="Parameter")]
   [ValidateNotNullOrEmpty()]
-  [string]$Parameter = "De standaad parameter waarde")
+  [string]$Parameter = "Default parameter value")
 
 #endregion Get parameters
 
@@ -81,9 +81,9 @@ If ($blnLogToFile) {$intLogtype += 2}
 
 #region Import module
 
-Foreach ($Module in $(Get-ChildItem -Path $strModulePath -Include "*.psm1").FullName)
+Foreach ($Module in $(Get-ChildItem -Path $strModulePath -Name "*.psm1"))
 {
-  Import-Module -Name $Module -Force
+  Import-Module -Name "$strModulePath\$Module" -Force
 }
 
 #endregion Import module
