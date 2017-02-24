@@ -5,9 +5,13 @@
 #region Get parameters
 
 Param(
-  [Parameter(Mandatory=$false, Position=0, HelpMessage="Parameter")]
+  [Parameter(Mandatory=$false, Position=0, HelpMessage="Ini file")]
   [ValidateNotNullOrEmpty()]
-  [string]$Parameter = "Default parameter value")
+  [string]$IniFile = '',
+  [Parameter(Mandatory=$false, Position=1, HelpMessage="CSV file path")]
+  [ValidateNotNullOrEmpty()]
+  [string]$CsvFilePath = ''
+)
 
 #endregion Get parameters
 
@@ -54,8 +58,10 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 [string]$strModulePath = "$strScriptDirectory\Module"
 
-[string]$strIniFilePath = "$strScriptDirectory\HostYourIT\hostyourit_db.ini"
-[string]$strCsvFilePath = "$strScriptDirectory\HostYourIT"
+If ($IniFile -eq '') {[string]$strIniFilePath = "$strScriptDirectory\HostYourIT\hostyourit_db.ini"}
+Else {[string]$strIniFilePath = $IniFile}
+If ($IniFile -eq '') {[string]$strCsvFilePath = "$strScriptDirectory\HostYourIT"}
+Else {[string]$strCsvFilePath = $CsvFilePath}
 [array]$arrDatabaseTables = @("Klanten","Prijzen_2016","Facturen_2016","Prijzen_2017","Facturen_2017")
 
 #endregion Set script variable
@@ -138,9 +144,6 @@ If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMess
 
 [object]$objIniFile = Read-IniFile -FilePath $strIniFilePath
 [string]$strDatabaseServer = $($objIniFile.default.server)
-[string]$strDatabaseUser = $($objIniFile.default.user)
-[string]$strDatabaseEncryptedPassword = $($objIniFile.default.password)
-[string]$strDatabaseEncryptedPasswordPassphrase = $($objIniFile.Encryption.passphrase)
 [string]$strDatabaseName = $($objIniFile.Database.name)
 [string]$strDatabaseUsername = $($objIniFile.User.user)
 [string]$strDatabaseUserEncryptedPassword = $($objIniFile.User.password)
@@ -149,14 +152,14 @@ If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMess
 If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMessage "End region:`t`t[Read ini file]"}
 #endregion Read ini file
 
-#region Reconnect to database server
+#region Connect to database server
 If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMessage "Start region:`t`t[Connect to database server]"}
 
 [array]$arrReturnValueDatabaseConnection = New-DatabaseConnection `
                                              -DatabaseServer $strDatabaseServer `
                                              -DatabaseName $strDatabaseName `
                                              -Username $strDatabaseUsername `
-                                             -Password $(New-DecryptedString -InputString $strDatabaseUserEncryptedPassword -Passphrase $strDatabaseEncryptedPasswordPassphrase) `
+                                             -Password $(New-DecryptedString -InputString $strDatabaseUserEncryptedPassword -Passphrase $strDatabaseUsername) `
                                              -Log @($true, $objLogValue)
 
 If ($arrReturnValueDatabaseConnection[0])
@@ -169,7 +172,7 @@ Else
   If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "WARNING" -LogMessage "NO database connection"}
 }
 If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMessage "End region:`t`t[Connect to database server]"}
-#endregion Reconnect to database server
+#endregion Connect to database server
 
 If ($blnDatabaseConnection)
 {

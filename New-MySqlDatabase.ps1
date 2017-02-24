@@ -5,9 +5,9 @@
 #region Get parameters
 
 Param(
-  [Parameter(Mandatory=$false, Position=0, HelpMessage="Parameter")]
+  [Parameter(Mandatory=$false, Position=0, HelpMessage="Ini file")]
   [ValidateNotNullOrEmpty()]
-  [string]$Parameter = "Default parameter value")
+  [string]$IniFile = '')
 
 #endregion Get parameters
 
@@ -35,7 +35,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [string]$strCreditName = $strScriptName
 [string]$strCreditCompany = 'Host Your IT'
 [string]$strCreditAuthor = 'Roeland van den Bosch'
-[string]$strCreditDate = '2017-02-19'
+[string]$strCreditDate = '2017-02-20'
 [string]$strCreditVersion = '0.1'
 [string]$strTemplateVersion = '0.1'
 
@@ -54,7 +54,8 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 [string]$strModulePath = "$strScriptDirectory\Module"
 
-[string]$strIniFilePath = "$strScriptDirectory\HostYourIT\hostyourit_db.ini"
+If ($IniFile -eq '') {[string]$strIniFilePath = "$strScriptDirectory\HostYourIT\hostyourit_db.ini"}
+Else {[string]$strIniFilePath = $IniFile}
 
 #endregion Set script variable
 
@@ -139,7 +140,6 @@ If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMess
 [string]$strDatabaseServer = $($objIniFile.default.server)
 [string]$strDatabaseUser = $($objIniFile.default.user)
 [string]$strDatabaseEncryptedPassword = $($objIniFile.default.password)
-[string]$strDatabaseEncryptedPasswordPassphrase = $($objIniFile.Encryption.passphrase)
 [string]$strDatabaseName = $($objIniFile.Database.name)
 [string]$strDatabaseUsername = $($objIniFile.User.user)
 [string]$strDatabaseUserEncryptedPassword = $($objIniFile.User.password)
@@ -154,7 +154,7 @@ If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMess
 [array]$arrReturnValueDatabaseConnection = New-DatabaseConnection `
                                              -DatabaseServer $strDatabaseServer `
                                              -Username $strDatabaseUser `
-                                             -Password $(New-DecryptedString -InputString $strDatabaseEncryptedPassword -Passphrase $strDatabaseEncryptedPasswordPassphrase) `
+                                             -Password $(New-DecryptedString -InputString $strDatabaseEncryptedPassword -Passphrase $strDatabaseUser) `
                                              -Log @($true, $objLogValue)
 
 If ($arrReturnValueDatabaseConnection[0])
@@ -199,7 +199,7 @@ If ($blnDatabaseConnection)
     $blnContinue = $false
     [array]$arrReturnValueDatabaseQuery = New-DatabaseQuery `
                                             -DatabaseConnection $objDatabaseConnection `
-                                            -SqlQuery "CREATE USER IF NOT EXISTS '$strDatabaseUsername' IDENTIFIED BY '$strDatabaseUserPassword'" `
+                                            -SqlQuery "CREATE USER IF NOT EXISTS '$strDatabaseUsername' IDENTIFIED BY '$(New-DecryptedString -InputString $strDatabaseUserEncryptedPassword -Passphrase $strDatabaseUsername)'" `
                                             -Log @($true, $objLogValue)
     If ($arrReturnValueDatabaseQuery[0])
     {
@@ -256,7 +256,7 @@ If ($blnContinue)
                                                -DatabaseServer $strDatabaseServer `
                                                -DatabaseName $strDatabaseName `
                                                -Username $strDatabaseUsername `
-                                               -Password $(New-DecryptedString -InputString $strDatabaseUserEncryptedPassword -Passphrase $strDatabaseEncryptedPasswordPassphrase) `
+                                               -Password $(New-DecryptedString -InputString $strDatabaseUserEncryptedPassword -Passphrase $strDatabaseUsername) `
                                                -Log @($true, $objLogValue)
 
   If ($arrReturnValueDatabaseConnection[0])
