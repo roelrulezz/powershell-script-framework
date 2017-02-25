@@ -2,3 +2,4 @@
 *.log
 *.csv
 Untitled*.ps1
+Module/NP_*.psm1
