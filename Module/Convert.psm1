@@ -1,7 +1,7 @@
 ﻿# Script Framework
 # Name    : Convert.psm1
 # Version : 0.1
-# Date    : 2017-02-25
+# Date    : 2017-02-26
 # Author  : Roeland van den Bosch
 # Website : http://www.roelandvdbosch.nl
 
@@ -106,4 +106,38 @@ Function Convert-UInt32ToBinStr
     [uInt32]$Integer
   )
   Return [convert]::ToString($Integer,2)
+}
+
+Function Convert-UInt32ToHexStr
+{
+<#
+  .Synopsis
+    Convert UInt32 > HexStr.
+  .Description
+    Convert an unsigned integer
+    to a hexadecimal string.
+  .Example
+    Convert-UInt32ToBinStr -Integer 8102
+    Returns a string with the binary
+    value "1FA6".
+  .Parameter Integer
+    Integer to convert.
+  .Inputs
+    [uInt32]
+  .Outputs
+    [string]
+  .Notes
+    NAME: Convert-UInt32ToHexStr
+    AUTHOR: Roeland van den Bosch
+    LASTEDIT: 20170226
+    KEYWORDS:
+  .Link
+     http://www.roelandvdbosch.nl
+  #Requires -Version 2.0
+#> 
+  Param (
+	[parameter(Mandatory=$true, Position=0, HelpMessage="Integer")]
+    [uInt32]$Integer
+  )
+  Return [convert]::ToString($Integer,16)
 }
