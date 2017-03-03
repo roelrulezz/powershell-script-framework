@@ -10,7 +10,10 @@ Param(
   [string]$IniFile = '',
   [Parameter(Mandatory=$false, Position=1, HelpMessage="CSV file path")]
   [ValidateNotNullOrEmpty()]
-  [string]$CsvFilePath = ''
+  [string]$CsvFilePath = '',
+  [Parameter(Mandatory=$false, Position=2, HelpMessage="Database tables")]
+  [ValidateNotNullOrEmpty()]
+  [string]$DatabaseTables = ''
 )
 
 #endregion Get parameters
@@ -39,7 +42,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [string]$strCreditName = $strScriptName
 [string]$strCreditCompany = 'Host Your IT'
 [string]$strCreditAuthor = 'Roeland van den Bosch'
-[string]$strCreditDate = '2017-02-19'
+[string]$strCreditDate = '2017-03-01'
 [string]$strCreditVersion = '0.1'
 [string]$strTemplateVersion = '0.1'
 
@@ -62,8 +65,8 @@ If ($IniFile -eq '') {[string]$strIniFilePath = "$strScriptDirectory\HostYourIT\
 Else {[string]$strIniFilePath = $IniFile}
 If ($IniFile -eq '') {[string]$strCsvFilePath = "$strScriptDirectory\HostYourIT"}
 Else {[string]$strCsvFilePath = $CsvFilePath}
-[array]$arrDatabaseTables = @("Klanten","Prijzen_2016","Facturen_2016","Prijzen_2017","Facturen_2017")
-
+If ($DatabaseTables -eq '') {[array]$arrDatabaseTables = @("Klanten","Prijzen_2016","Facturen_2016","Prijzen_2017","Facturen_2017")}
+Else {[array]$arrDatabaseTables = $DatabaseTables.Split(',')}
 #endregion Set script variable
 
 ##############################################################
@@ -147,7 +150,6 @@ If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMess
 [string]$strDatabaseName = $($objIniFile.Database.name)
 [string]$strDatabaseUsername = $($objIniFile.User.user)
 [string]$strDatabaseUserEncryptedPassword = $($objIniFile.User.password)
-[array]$arrDatabaseTables = $($objIniFile.Tables).Keys
 
 If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMessage "End region:`t`t[Read ini file]"}
 #endregion Read ini file
