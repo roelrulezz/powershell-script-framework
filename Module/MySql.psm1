@@ -86,7 +86,9 @@ Function New-DatabaseConnection
     $arrReturnValue += @([object]$objSqlConnection)
     $arrReturnValue[0] = $true
   }
+
   If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t[New-DatabaseConnection]"}
+
   Return [array]$arrReturnValue
 }
 

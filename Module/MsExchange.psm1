@@ -70,7 +70,7 @@ Function New-ExchangeServiceObject
   }
   Catch
   {
-    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage $_}
   }
 
   If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t[New-ExchangeServiceObject]"}
@@ -193,7 +193,7 @@ Function New-EmailMessageObject
   }
   Catch
   {
-    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage $_}
   }
 
   If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t[New-EmailMessageObject]"}
