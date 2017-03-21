@@ -3,3 +3,6 @@
 *.csv
 Untitled*.ps1
 Module/NP_*.psm1
+_HostYourIT/*
+home-assistant/*
+TEST.ps1
