@@ -54,7 +54,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 [string]$strModulePath = "$strScriptDirectory\Module"
 
-If ($IniFile -eq '') {[string]$strIniFilePath = "$strScriptDirectory\HostYourIT\hostyourit_db.ini"}
+If ($IniFile -eq '') {[string]$strIniFilePath = "\\10.14.1.15\data\HostYourIT\Administratie\Facturen\hostyourit_db.ini"}
 Else {[string]$strIniFilePath = $IniFile}
 
 #endregion Set script variable

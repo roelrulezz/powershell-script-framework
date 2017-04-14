@@ -35,7 +35,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [string]$strCreditName = $strScriptName
 [string]$strCreditCompany = 'Host Your IT'
 [string]$strCreditAuthor = 'Roeland van den Bosch'
-[string]$strCreditDate = '2017-02-19'
+[string]$strCreditDate = '2017-04-14'
 [string]$strCreditVersion = '0.1'
 [string]$strTemplateVersion = '0.1'
 
@@ -50,6 +50,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [string]$strLoglevel = "DEBUG" # ERROR / WARNING / INFO / DEBUG / NONE
 [boolean]$blnLogToConsole = $true
 [boolean]$blnLogToFile = $true
+[boolean]$blnLogToAltiris = $true
 [string]$strLogfile = "$strScriptDirectory\$($strScriptName.Replace('.ps1','.log'))"
 
 [string]$strModulePath = "$strScriptDirectory\..\Module"
@@ -66,8 +67,9 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 If ($blnLogToConsole) {$intLogtype += 1}
 If ($blnLogToFile) {$intLogtype += 2}
+If ($blnLogToAltiris) {$intLogtype += 4}
 
-[boolean]$blnLog = ($blnLogToFile -or $blnLogToConsole) -and $intLogtype -gt 0
+[boolean]$blnLog = $intLogtype -gt 0
 
 [object]$objLogValue = @{'Loglevel' = $strLoglevel;
                          'Logtype' = $intLogtype;
