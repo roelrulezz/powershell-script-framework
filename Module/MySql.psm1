@@ -1,5 +1,5 @@
 ﻿# Script Framework
-# Name    : Log.psm1
+# Name    : MySql.psm1
 # Version : 0.1
 # Date    : 2017-02-19
 # Author  : Roeland van den Bosch
