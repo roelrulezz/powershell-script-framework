@@ -33,11 +33,10 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 [boolean]$blnCreditShow = $true
 [string]$strCreditName = $strScriptName
-[string]$strCreditCompany = 'Host Your IT'
 [string]$strCreditAuthor = 'Roeland van den Bosch'
-[string]$strCreditDate = '2018-03-05'
+[string]$strCreditDate = '2019-05-13'
 [string]$strCreditVersion = '0.1'
-[string]$strTemplateVersion = '0.3'
+[string]$strTemplateVersion = '0.4'
 
 #endregion Set credit variable 
 
@@ -53,7 +52,7 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [boolean]$blnLogToAltiris = $false
 [string]$strLogfile = "$strScriptDirectory\$($strScriptName.Replace('.ps1','.log'))"
 
-[string]$strModulePath = "$strScriptDirectory\..\Module"
+[string]$strModulePath = "$strScriptDirectory\Module"
 
 #endregion Set script variable
 
@@ -110,7 +109,6 @@ Function Show-Credit
 {
   Write-Host "###################### Credits ############################" -ForegroundColor Yellow
   Write-Host "Name:`t`t$strCreditName" -ForegroundColor Yellow
-  Write-Host "Company:`t$strCreditCompany" -ForegroundColor Yellow
   Write-Host "Author:`t`t$strCreditAuthor" -ForegroundColor Yellow
   Write-Host "Date:`t`t$strCreditDate"  -ForegroundColor Yellow
   Write-Host "Version:`t$strCreditVersion" -ForegroundColor Yellow
@@ -120,12 +118,21 @@ Function Show-Credit
 Function Stop-Script
 {
   If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMessage "Start Function:`t[Stop-Script]"}
-
   If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "WARNING" -LogMessage "Script has been stopped by an error"}
-
   If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "DEBUG" -LogMessage "End Function:`t`t[Stop-Script]"}
   If ($blnLog) {Stop-Log -LogValue $objLogValue}
   Exit
+}
+
+function PressAnyKey()
+{
+  if ($host.name -notmatch 'ISE')
+  {
+    Write-Host "########################################################################################" -ForegroundColor Yellow
+    Write-Host "Press any key to continue..."
+    $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | Out-Null
+    $host.UI.RawUI.Flushinputbuffer()
+  }
 }
 
 #endregion Default function

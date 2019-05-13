@@ -1,7 +1,7 @@
 # Script Framework
 # Name    : IniFile.psm1
-# Version : 0.1
-# Date    : 2017-02-19
+# Version : 0.2
+# Date    : 2018-11-05
 # Author  : Roeland van den Bosch
 # Website : http://www.roelandvdbosch.nl
 
@@ -32,7 +32,7 @@ Function Read-IniFile
   .Notes
     NAME: Read-IniFile
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170219
+    LASTEDIT: 20181105
     KEYWORDS:
   .Link
      http://www.roelandvdbosch.nl
@@ -46,7 +46,7 @@ Function Read-IniFile
     [array]$Log = @($false)
   )
 
-  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t[Read-IniFile]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Read-IniFile]"}
 
   [object]$objIni = New-Object System.Collections.Specialized.OrderedDictionary
   [object]$objCurrentSection = New-Object System.Collections.Specialized.OrderedDictionary
@@ -56,7 +56,7 @@ Function Read-IniFile
 
   If (Test-Path $FilePath)
   {
-    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Ini file found: [$FilePath]"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Ini file found:`t`t[$FilePath]"}
     
     Foreach ($Line in $(Get-Content -Path $FilePath))
     {
@@ -96,7 +96,7 @@ Function Read-IniFile
   }
   Else
   {
-    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "WARNING" -LogMessage "Ini file NOT found: [$FilePath]"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "WARNING" -LogMessage "Ini file NOT found:`t`t[$FilePath]"}
   }
 
   If ($objIni.Keys -notcontains $strCurrentSectionName)
@@ -104,7 +104,7 @@ Function Read-IniFile
     $objIni.Add($strCurrentSectionName, $objCurrentSection)
   }
 
-  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t[Read-IniFile]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Read-IniFile]"}
 
   Return $objIni
 }
@@ -138,7 +138,7 @@ Function Write-IniFile
   .Notes
     NAME: Write-IniFile
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170219
+    LASTEDIT: 20181105
     KEYWORDS:
   .Link
      http://www.roelandvdbosch.nl
@@ -154,7 +154,7 @@ Function Write-IniFile
     [array]$Log = @($false)
   )
 
-  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t[Write-IniFile]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Write-IniFile]"}
 	
   [string]$strOutput = ""
   ForEach ($objSection in $Ini.GetEnumerator())
@@ -175,7 +175,7 @@ Function Write-IniFile
   $strOutput = $strOutput.TrimEnd("`r`n")
   If ([String]::IsNullOrEmpty($FilePath))
   {
-	If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t[Write-IniFile]"}
+	If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Write-IniFile]"}
     Return $strOutput
   }
   Else
@@ -183,5 +183,5 @@ Function Write-IniFile
 	$strOutput | Out-File -FilePath $FilePath -Encoding:ASCII
   }
 
-  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t[Write-IniFile]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Write-IniFile]"}
 }

@@ -1,7 +1,7 @@
 ﻿# Script Framework
 # Name    : FileLog.psm1
-# Version : 0.1
-# Date    : 2017-02-19
+# Version : 0.2
+# Date    : 2019-02-20
 # Author  : Roeland van den Bosch
 # Website : http://www.roelandvdbosch.nl
 
@@ -26,7 +26,7 @@ Function Start-FileLog
   .Notes
     NAME: Start-FileLog
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170219
+    LASTEDIT: 20190220
     KEYWORDS:
   .Link
      http://www.roelandvdbosch.nl
@@ -40,6 +40,14 @@ Function Start-FileLog
     [ValidateNotNullOrEmpty()]
     [string]$Logfile
     )
+  
+  [string]$strLogFileFolder = $Logfile.Replace($Logfile.Split('\')[-1],"")
+  $strLogFileFolder = $strLogFileFolder.Substring(0,$strLogFileFolder.Length - 1)
+  if (!(Test-Path -Path $strLogFileFolder))
+  {
+    New-Item -Path "$strLogFileFolder" -ItemType Directory | Out-Null
+  }
+
   "$(Get-Date -format yyyyMMddhhmmss) ############################################################" | Out-File -File $Logfile -Append
   "$(Get-Date -format yyyyMMddhhmmss) INFO    - Log Level [$Loglevel]" | Out-File -File $Logfile -Append
 }
