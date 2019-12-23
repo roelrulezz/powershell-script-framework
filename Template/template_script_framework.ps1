@@ -34,9 +34,9 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [boolean]$blnCreditShow = $true
 [string]$strCreditName = $strScriptName
 [string]$strCreditAuthor = 'Roeland van den Bosch'
-[string]$strCreditDate = '2019-05-13'
+[string]$strCreditDate = '2019-12-23'
 [string]$strCreditVersion = '0.1'
-[string]$strTemplateVersion = '0.4'
+[string]$strTemplateVersion = '0.5'
 
 #endregion Set credit variable 
 
@@ -49,8 +49,8 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [string]$strLoglevel = "DEBUG" # ERROR / WARNING / INFO / DEBUG / NONE
 [boolean]$blnLogToConsole = $true
 [boolean]$blnLogToFile = $true
-[boolean]$blnLogToAltiris = $false
-[string]$strLogfile = "$strScriptDirectory\$($strScriptName.Replace('.ps1','.log'))"
+[string]$strLogDirectory = "$strScriptDirectory\Log" 
+[string]$strLogfile = "$strLogDirectory\$($strScriptName.Replace('.ps1','.log'))"
 
 [string]$strModulePath = "$strScriptDirectory\Module"
 
@@ -66,13 +66,17 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 
 If ($blnLogToConsole) {$intLogtype += 1}
 If ($blnLogToFile) {$intLogtype += 2}
-If ($blnLogToAltiris) {$intLogtype += 4}
 
 [boolean]$blnLog = $intLogtype -gt 0
 
 [object]$objLogValue = @{'Loglevel' = $strLoglevel;
                          'Logtype' = $intLogtype;
                          'Logfile' = $strLogfile}
+
+If (!(Test-Path -Path $strLogDirectory))
+{
+  New-Item -Path $strLogDirectory -ItemType Directory | Out-Null
+}
 
 #endregion Initialize log
 

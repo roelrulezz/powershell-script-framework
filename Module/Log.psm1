@@ -1,7 +1,7 @@
 ﻿# Script Framework
 # Name    : Log.psm1
-# Version : 0.1
-# Date    : 2017-03-21
+# Version : 0.2
+# Date    : 2019-12-23
 # Author  : Roeland van den Bosch
 # Website : http://www.roelandvdbosch.nl
 
@@ -29,7 +29,7 @@ Function Start-Log
   .Notes
     NAME: Start-Log
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170321
+    LASTEDIT: 20191223
     KEYWORDS:
   .Link
      http://www.roelandvdbosch.nl
@@ -43,13 +43,11 @@ Function Start-Log
 
   [string]$strLogtypeConsole = [convert]::ToString(1,2)
   [string]$strLogtypeFile = [convert]::ToString(2,2)
-  [string]$strLogtypeAltiris = [convert]::ToString(4,2)
 
   Switch ([convert]::ToString([int32]$LogValue.Logtype,2))
   {
     {$_ -band $strLogtypeConsole} {Start-ConsoleLog -LogLevel $LogValue.Loglevel}
     {$_ -band $strLogtypeFile} {Start-FileLog -LogLevel $LogValue.Loglevel -LogFile $LogValue.Logfile}
-    {$_ -band $strLogtypeAltiris} {Start-AltirisLog -LogLevel $LogValue.Loglevel}
   }
 }
 
@@ -84,7 +82,7 @@ Function Write-Log
   .Notes
     NAME: Write-Log
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170321
+    LASTEDIT: 20191223
     KEYWORDS:
   .Link
      http://www.roelandvdbosch.nl
@@ -108,13 +106,11 @@ Function Write-Log
   {
     [string]$strLogtypeConsole = [convert]::ToString(1,2)
     [string]$strLogtypeFile = [convert]::ToString(2,2)
-    [string]$strLogtypeAltiris = [convert]::ToString(4,2)
 
     Switch ([convert]::ToString([int32]$LogValue.Logtype,2))
     {
       {$_ -band $strLogtypeConsole} {Write-ConsoleLog -LogLevel $LogMessageLevel -LogMessage $LogMessage}
       {$_ -band $strLogtypeFile} {Write-FileLog -LogLevel $LogMessageLevel -LogFile $LogValue.Logfile -LogMessage $LogMessage}
-      {$_ -band $strLogtypeAltiris} {Write-AltirisLog -LogLevel $LogMessageLevel -LogMessage $LogMessage}
     }
   }
 }
@@ -143,7 +139,7 @@ Function Stop-Log
   .Notes
     NAME: Stop-Log
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170321
+    LASTEDIT: 20191223
     KEYWORDS:
   .Link
      http://www.roelandvdbosch.nl
@@ -157,12 +153,10 @@ Function Stop-Log
   
   [string]$strLogtypeConsole = [convert]::ToString(1,2)
   [string]$strLogtypeFile = [convert]::ToString(2,2)
-  [string]$strLogtypeAltiris = [convert]::ToString(4,2)
 
   Switch ([convert]::ToString([int32]$LogValue.Logtype,2))
   {
     {$_ -band $strLogtypeConsole} {Stop-ConsoleLog}
     {$_ -band $strLogtypeFile} {Stop-FileLog -LogFile $LogValue.Logfile}
-    {$_ -band $strLogtypeAltiris} {Stop-AltirisLog}
   }
 }
