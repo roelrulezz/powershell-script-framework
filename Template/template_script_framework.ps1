@@ -129,7 +129,7 @@ Function Check-ElevatedPowerShell
   Else
   {
     If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "WARNING" -LogMessage "Restart script with elevated privileges"}
-    Start-Process PowerShell -verb runas -ArgumentList '-NoProfile', '-ExecutionPolicy', 'ByPass', '-File', "$strScriptDirectory\$strScriptName", '-EnvironmentName', "$EnvironmentName" -Wait
+    Start-Process PowerShell -verb runas -ArgumentList '-NoProfile', '-ExecutionPolicy', 'ByPass', '-File', "$strScriptDirectory\$strScriptName" -Wait
     Return $false
   }
 }
