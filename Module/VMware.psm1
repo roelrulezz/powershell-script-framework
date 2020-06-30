@@ -53,7 +53,7 @@ Function Connect-VMware
     [Parameter(Mandatory=$true, Position=2, HelpMessage="Password")]
     [ValidateNotNullOrEmpty()]
     [string]$Password,
-    [Parameter(Mandatory=$false, Position=1, HelpMessage="Create log")]
+    [Parameter(Mandatory=$false, Position=3, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
     [array]$Log = @($false)
   )
@@ -148,7 +148,7 @@ Function Get-VMwareFolder
     The Get-VMwareFolder cmdlet checks if
     a folder is present in a VMware environment.
   .Example
-    Get-VMwareFolder -Server "vmwareserver" -Folder "folder" -Root "rootfolder" -Log $true
+    Get-VMwareFolder -Server "vmwareserver" -Folder "folder" -Root "rootfolder" -Log @($true,$objLogValue)
     Checks if a folder is present in  a VMware 
     environment and log messages
   .Example
@@ -167,16 +167,16 @@ Function Get-VMwareFolder
     [string]
     [string]
     [string]
-    [boolean]
+    [object]
   .OutPuts
     [object]
   .Notes
     NAME: Get-VMwareFolder
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170207
+    LASTEDIT: 20200630
     KEYWORDS:
   .Link
-    -
+     http://www.roelandvdbosch.nl
  #Requires -Version 2.0
 #> 
   Param(
@@ -191,11 +191,10 @@ Function Get-VMwareFolder
     [string]$Root = '-',
     [Parameter(Mandatory=$false, Position=3, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
-    [boolean]$Log = $false
+    [array]$Log = @($false)
   )
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "Start function:`t[Get-VMwareFolder]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "Start function:`t[Get-VMwareFolder]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Get-VMwareFolder]"}
 
   [boolean]$blnFolderFound = $false
 
@@ -220,12 +219,10 @@ Function Get-VMwareFolder
   }
   Catch
   {
-    If ($Global:blnConsoleLog -and $Global:blnLogLevel1 -and $Log) {Write-ConsoleLog -LogLevel "ERROR" -LogMessage "$_"}
-    If ($Global:blnFileLog -and $Global:blnLogLevel1 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "ERROR" -LogMessage "$_"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
   }
   
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "End function:`t`t[Get-VMwareFolder]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "End function:`t`t[Get-VMwareFolder]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Disconnect-VMware]"}
  
   Return @($blnFolderFound,$objReturnValue)
 }
@@ -239,15 +236,15 @@ Function Get-VMwareGuestServers
     The Get-VMwareGuestServers cmdlet lists the
     guest servers in a VMware environment.
   .Example
-    Get-VMwareGuestServers -Host "vmwareserver" -Name "guestserver" -Location "vmwarefolder" -Log $true
+    Get-VMwareGuestServers -Host "vmwareserver" -Name "guestserver" -Location "vmwarefolder" -Log @($true,$objLogValue)
     List all VMware guest servers "guestserver" in 
     VMware folder "vmwarefolder" and log messages
   .Example
-    Get-VMwareGuestServers -Host "vmwareserver" -Name "guestserver"-Log $true
+    Get-VMwareGuestServers -Host "vmwareserver" -Name "guestserver" -Log @($true,$objLogValue)
     List all VMware guest servers "guestserver" 
     and log messages
   .Example
-    Get-VMwareGuestServers -Host "vmwareserver" -Location "vmwarefolder" -Log $true
+    Get-VMwareGuestServers -Host "vmwareserver" -Location "vmwarefolder" -Log @($true,$objLogValue)
     List all VMware guest servers in VMware 
     folder "vmwarefolder" and log messages
   .Example
@@ -266,16 +263,16 @@ Function Get-VMwareGuestServers
     [string]
     [string]
     [string]
-    [boolean]
+    [object]
   .OutPuts
     [array]
   .Notes
     NAME: Get-VMwareGuestServers
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170207
+    LASTEDIT: 20200630
     KEYWORDS:
   .Link
-    -
+     http://www.roelandvdbosch.nl
  #Requires -Version 2.0
 #> 
   Param(
@@ -290,11 +287,10 @@ Function Get-VMwareGuestServers
     [string]$Location,
     [Parameter(Mandatory=$false, Position=3, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
-    [boolean]$Log = $false
+    [array]$Log = @($false)
   )
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "Start function:`t[Get-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "Start function:`t[Get-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Get-VMwareGuestServers]"}
 
   [boolean]$blnServerFound = $false
 
@@ -309,13 +305,11 @@ Function Get-VMwareGuestServers
     }
     Catch
     {
-      If ($Global:blnConsoleLog -and $Global:blnLogLevel1 -and $Log) {Write-ConsoleLog -LogLevel "ERROR" -LogMessage "$_"}
-      If ($Global:blnFileLog -and $Global:blnLogLevel1 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "ERROR" -LogMessage "$_"}
+      If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
     }
   }
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "End function:`t`t[Get-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "End function:`t`t[Get-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Get-VMwareGuestServers]"}
  
   Return @($blnServerFound,$arrReturnValue)
 }
@@ -329,7 +323,7 @@ Function Start-VMwareGuestServers
     The Start-VMwareGuestServers cmdlet starts
     guest servers in a VMware environment.
   .Example
-    Start-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Log $true
+    Start-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Log @($true,$objLogValue)
     Start all VMware guest servers "guestservers" in 
     VMware folder "vmwarefolder" and log messages
   .Example
@@ -348,16 +342,16 @@ Function Start-VMwareGuestServers
     [string]
     [object]
     [string]
-    [boolean]
+    [object]
   .OutPuts
     [boolean]
   .Notes
     NAME: Start-VMwareGuestServers
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170207
+    LASTEDIT: 20200630
     KEYWORDS:
   .Link
-    -
+     http://www.roelandvdbosch.nl
  #Requires -Version 2.0
 #> 
   Param(
@@ -372,11 +366,10 @@ Function Start-VMwareGuestServers
     [string]$Location,
     [Parameter(Mandatory=$false, Position=3, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
-    [boolean]$Log = $false
+    [array]$Log = @($false)
   )
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "Start function:`t[Start-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "Start function:`t[Start-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Start-VMwareGuestServers]"}
 
   [boolean]$blnServersRunning = $false
   Try
@@ -386,25 +379,21 @@ Function Start-VMwareGuestServers
     {
       If ($Server.PowerState -eq "PoweredOff")
       {
-        If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "Start VMware guest server [$($Server.Name)]"}
-        If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "Start VMware guest server [$($Server.Name)]"}
+        If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Start VMware guest server [$($Server.Name)]"}
         If ($Server.Guest.ToolsVersion -ne '')
         {
-          If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "VMware tools installed [$($Server.Guest.ToolsVersion)]"}
-          If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "VMware tools installed [$($Server.Guest.ToolsVersion)]"}
+          If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "VMware tools installed [$($Server.Guest.ToolsVersion)]"}
         }
         Else
         {
-          If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "NO VMware tools installed"}
-          If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "NO VMware tools installed"}
+          If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "NO VMware tools installed"}
         }
         Start-VM -VM $Server -Server $Host -RunAsync -Confirm:$false | Out-Null
         $arrTaskList.Add($Server.Name)
       }
       Else
       {
-        If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "VMware guest server already running [$($Server.Name)]"}
-        If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "VMware guest server already running [$($Server.Name)]"}
+        If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "VMware guest server already running [$($Server.Name)]"}
       }
     }
     [int]$intTotalTasks = $arrTaskList.Count
@@ -433,12 +422,10 @@ Function Start-VMwareGuestServers
   }
   Catch
   {
-    If ($Global:blnConsoleLog -and $Global:blnLogLevel1 -and $Log) {Write-ConsoleLog -LogLevel "ERROR" -LogMessage "$_"}
-    If ($Global:blnFileLog -and $Global:blnLogLevel1 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "ERROR" -LogMessage "$_"}
+      If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
   }
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "End function:`t`t[Start-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "End function:`t`t[Start-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Start-VMwareGuestServers]"}
  
   Return $blnServersRunning
 }
@@ -452,11 +439,11 @@ Function Stop-VMwareGuestServers
     The Stop-VMwareGuestServers cmdlet stops
     guest servers in a VMware environment.
   .Example
-    Stop-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Force $true -Log $true
+    Stop-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Force $true -Log @($true,$objLogValue)
     Stop all VMware guest servers "guestservers" in 
     VMware folder "vmwarefolder" and log messages
   .Example
-    Stop-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Log $true
+    Stop-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Log @($true,$objLogValue)
     Shutdown all VMware guest servers "guestservers" in 
     VMware folder "vmwarefolder" and log messages
   .Example
@@ -475,16 +462,16 @@ Function Stop-VMwareGuestServers
     [string]
     [array]
     [string]
-    [boolean]
+    [object]
   .OutPuts
     [boolean]
   .Notes
     NAME: Stop-VMwareGuestServers
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170207
+    LASTEDIT: 20200630
     KEYWORDS:
   .Link
-    -
+     http://www.roelandvdbosch.nl
  #Requires -Version 2.0
 #> 
   Param(
@@ -502,13 +489,13 @@ Function Stop-VMwareGuestServers
     [boolean]$Force = $false,
     [Parameter(Mandatory=$false, Position=4, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
-    [boolean]$Log = $false
+    [array]$Log = @($false)
   )
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "Start function:`t[Stop-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "Start function:`t[Stop-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Stop-VMwareGuestServers]"}
 
   [boolean]$blnServersStopped = $false
+
   Try
   {
     [System.Collections.ArrayList]$arrTaskList = @()
@@ -518,26 +505,21 @@ Function Stop-VMwareGuestServers
       {
         If ($Server.Guest.ToolsVersion -ne '' -and -not $Force)
         {
-          If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "Shutdown VMware guest server [$($Server.Name)]"}
-          If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "Shutdown VMware guest server [$($Server.Name)]"}
-          If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "VMware tools installed [$($Server.Guest.ToolsVersion)]"}
-          If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "VMware tools installed [$($Server.Guest.ToolsVersion)]"}
+          If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Shutdown VMware guest server [$($Server.Name)]"}
+          If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "VMware tools installed [$($Server.Guest.ToolsVersion)]"}
           Stop-VMGuest -VM $Server -Server $Host -Confirm:$false | Out-Null
           $arrTaskList.Add($Server.Name)
         }
         Else
         {
-          If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "Stop VMware guest server [$($Server.Name)]"}
-          If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "Stop VMware guest server [$($Server.Name)]"}
+          If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Stop VMware guest server [$($Server.Name)]"}
           If ($Force)
           {
-            If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "Forced stop"}
-            If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "Forced stop"}
+            If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Forced stop"}
           }
           Else
           {
-            If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "NO VMware tools installed"}
-            If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "NO VMware tools installed"}
+            If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "NO VMware tools installed"}
           }
           Stop-VM -VM $Server -Server $Host -Confirm:$false -RunAsync | Out-Null
           $arrTaskList.Add($Server.Name)
@@ -545,8 +527,7 @@ Function Stop-VMwareGuestServers
       }
       Else
       {
-        If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "VMware guest server already stopped [$($Server.Name)]"}
-        If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "VMware guest server already stopped [$($Server.Name)]"}
+        If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "VMware guest server already stopped [$($Server.Name)]"}
       }
     }
     [int]$intTotalTasks = $arrTaskList.Count
@@ -567,12 +548,10 @@ Function Stop-VMwareGuestServers
   }
   Catch
   {
-    If ($Global:blnConsoleLog -and $Global:blnLogLevel1 -and $Log) {Write-ConsoleLog -LogLevel "ERROR" -LogMessage "$_"}
-    If ($Global:blnFileLog -and $Global:blnLogLevel1 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "ERROR" -LogMessage "$_"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
   }
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "End function:`t`t[Stop-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "End function:`t`t[Stop-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Stop-VMwareGuestServers]"}
  
   Return $blnServersStopped
 }
