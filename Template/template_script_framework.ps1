@@ -34,9 +34,9 @@ Try {[string]$strScriptDirectory = Split-Path $script:MyInvocation.MyCommand.Pat
 [boolean]$blnCreditShow = $true
 [string]$strCreditName = $strScriptName
 [string]$strCreditAuthor = 'Roeland van den Bosch'
-[string]$strCreditDate = '2019-12-23'
+[string]$strCreditDate = '2020-06-30'
 [string]$strCreditVersion = '0.1'
-[string]$strTemplateVersion = '0.5'
+[string]$strTemplateVersion = '1.0'
 
 #endregion Set credit variable 
 
@@ -117,6 +117,21 @@ Function Show-Credit
   Write-Host "Date:`t`t$strCreditDate"  -ForegroundColor Yellow
   Write-Host "Version:`t$strCreditVersion" -ForegroundColor Yellow
   Write-Host "###########################################################`r`n" -ForegroundColor Yellow
+}
+
+Function Check-ElevatedPowerShell
+{
+  If (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+  {
+    If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "INFO" -LogMessage "Running script with elevated privileges"}
+    Return $true
+  }
+  Else
+  {
+    If ($blnLog) {Write-Log -LogValue $objLogValue -LogMessageLevel "WARNING" -LogMessage "Restart script with elevated privileges"}
+    Start-Process PowerShell -verb runas -ArgumentList '-NoProfile', '-ExecutionPolicy', 'ByPass', '-File', "$strScriptDirectory\$strScriptName", '-EnvironmentName', "$EnvironmentName" -Wait
+    Return $false
+  }
 }
 
 Function Stop-Script
