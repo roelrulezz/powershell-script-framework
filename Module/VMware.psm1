@@ -565,7 +565,7 @@ Function Remove-VMwareGuestServers
     The Remove-VMwareGuestServers cmdlet removes
     guest servers in a VMware environment.
   .Example
-    Remove-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Log $true
+    Remove-VMwareGuestServers -Host "vmwareserver" -Servers "guestservers" -Location "vmwarefolder" -Log @($true,$objLogValue)
     Remove all VMware guest servers "guestservers" in 
     VMware folder "vmwarefolder" and log messages
   .Example
@@ -584,16 +584,16 @@ Function Remove-VMwareGuestServers
     [string]
     [array]
     [string]
-    [boolean]
+    [object]
   .OutPuts
     [boolean]
   .Notes
     NAME: Remove-VMwareGuestServers
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170207
+    LASTEDIT: 20200630
     KEYWORDS:
   .Link
-    -
+     http://www.roelandvdbosch.nl
  #Requires -Version 2.0
 #> 
   Param(
@@ -608,19 +608,17 @@ Function Remove-VMwareGuestServers
     [string]$Location,
     [Parameter(Mandatory=$false, Position=3, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
-    [boolean]$Log = $false
+    [array]$Log = @($false)
   )
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "Start function:`t[Remove-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "Start function:`t[Remove-VMwareGuestServers]"}
-
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Remove-VMwareGuestServers]"}
+  
   Try
   {
     [boolean]$blnServersStopped = $false
     If ($Servers.PowerState -contains 'PoweredOn')
     {
-      If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "VMware guest servers still running [$($Servers | Foreach-Object {If ($_.PowerState -eq 'PoweredOn') {$_.Name}})]"}
-      If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "VMware guest servers still running [$($Servers | Foreach-Object {If ($_.PowerState -eq 'PoweredOn') {$_.Name}})]"}
+      If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "VMware guest servers still running [$($Servers | Foreach-Object {If ($_.PowerState -eq 'PoweredOn') {$_.Name}})]"}
       $blnServersStopped = Stop-VMwareGuestServers -Host $Host `
                                                    -Servers $Servers `
                                                    -Location $Location `
@@ -637,8 +635,7 @@ Function Remove-VMwareGuestServers
       [object]$objTaskList = @{}
       Foreach ($Server in $Servers)
       {
-        If ($Global:blnConsoleLog -and $Global:blnLogLevel3 -and $Log) {Write-ConsoleLog -LogLevel "INFO" -LogMessage "Remove VMware guest server [$($Server.Name)]"}
-        If ($Global:blnFileLog -and $Global:blnLogLevel3 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "INFO" -LogMessage "Remove VMware guest server [$($Server.Name)]"}
+        If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "INFO" -LogMessage "Remove VMware guest server [$($Server.Name)]"}
         $objTaskList[(Remove-VM -VM $Server -Server $Host -Confirm:$false -DeletePermanently -RunAsync -ErrorAction Stop).Id] = $Server.Name
       }
       [int]$intTotalTasks = $objTaskList.Count
@@ -657,12 +654,10 @@ Function Remove-VMwareGuestServers
   }
   Catch
   {
-    If ($Global:blnConsoleLog -and $Global:blnLogLevel1 -and $Log) {Write-ConsoleLog -LogLevel "ERROR" -LogMessage "$_"}
-    If ($Global:blnFileLog -and $Global:blnLogLevel1 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "ERROR" -LogMessage "$_"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
   }
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "End function:`t`t[Remove-VMwareGuestServers]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "End function:`t`t[Remove-VMwareGuestServers]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Remove-VMwareGuestServers]"}
  
   Return $blnServersRemoved
 }
@@ -677,11 +672,11 @@ Function Set-VMwareGuestServerMacAddress
     the MAC address for a guest servers in a VMware
     environment.
   .Example
-    Set-VMwareGuestServerMacAddress -Host "vmwareserver" -Nic "nicobject" -Type "generated" -Log $true
+    Set-VMwareGuestServerMacAddress -Host "vmwareserver" -Nic "nicobject" -Type "generated" -Log @($true,$objLogValue)
     Set MAC address for VMware guest server nic object "nicobject" with 
     type "generated" and log messages
   .Example
-    Set-VMwareGuestServerMacAddress -Host "vmwareserver" -Nic "nicobject" -Type "manual" -Address "00:50:56:ab:00:10" -Log $true
+    Set-VMwareGuestServerMacAddress -Host "vmwareserver" -Nic "nicobject" -Type "manual" -Address "00:50:56:ab:00:10" -Log @($true,$objLogValue)
     Set MAC address for VMware guest server nic object "nicobject" with 
     type "manual", MAC address "00:50:56:ab:00:10" and log messages
   .Parameter Host
@@ -699,16 +694,16 @@ Function Set-VMwareGuestServerMacAddress
     [object]
     [string]
     [string]
-    [boolean]
+    [object]
   .OutPuts
     [array]
   .Notes
     NAME: Set-VMwareGuestServerMacAddress
     AUTHOR: Roeland van den Bosch
-    LASTEDIT: 20170207
+    LASTEDIT: 20200630
     KEYWORDS:
   .Link
-    -
+     http://www.roelandvdbosch.nl
  #Requires -Version 2.0
 #> 
   Param(
@@ -724,13 +719,12 @@ Function Set-VMwareGuestServerMacAddress
     [Parameter(Mandatory=$false, Position=3, HelpMessage="MAC Address")]
     [ValidateNotNullOrEmpty()]
     [string]$Address,
-    [Parameter(Mandatory=$false, Position=4, HelpMessage="Create log")]
+    [Parameter(Mandatory=$false, Position=3, HelpMessage="Create log")]
     [ValidateNotNullOrEmpty()]
-    [boolean]$Log = $false
+    [array]$Log = @($false)
   )
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "Start function:`t[Set-VMwareGuestServerMacAddress]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "Start function:`t[Set-VMwareGuestServerMacAddress]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "Start function:`t`t[Set-VMwareGuestServerMacAddress]"}
 
   Try
   {
@@ -755,12 +749,10 @@ Function Set-VMwareGuestServerMacAddress
   }
   Catch
   {
-    If ($Global:blnConsoleLog -and $Global:blnLogLevel1 -and $Log) {Write-ConsoleLog -LogLevel "ERROR" -LogMessage "$_"}
-    If ($Global:blnFileLog -and $Global:blnLogLevel1 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "ERROR" -LogMessage "$_"}
+    If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "ERROR" -LogMessage "$_"}
   }
 
-  If ($Global:blnConsoleLog -and $Global:blnLogLevel4 -and $Log) {Write-ConsoleLog -LogLevel "DEBUG" -LogMessage "End function:`t`t[Set-VMwareGuestServerMacAddress]"}
-  If ($Global:blnFileLog -and $Global:blnLogLevel4 -and $Log) {Write-FileLog -LogFile $Global:strLogFile -LogLevel "DEBUG" -LogMessage "End function:`t`t[Set-VMwareGuestServerMacAddress]"}
+  If ($Log[0]) {Write-Log -LogValue $Log[1] -LogMessageLevel "DEBUG" -LogMessage "End function:`t`t`t[Set-VMwareGuestServerMacAddress]"}
  
   Return @($blnVMwareGuestServerMacAddressSet, $objNic)
 }
