@@ -1,13 +1,4 @@
 *.ini
 *.log
 *.csv
-Untitled*.ps1
-Module/NP_*.psm1
-Module/NP_*.ini
-_HostYourIT/*
-home-assistant/*
-TEST.ps1
 /.vs/*
-Import-MySqlData.ps1
-New-Invoice_v0.1.ps1
-New-MySqlDatabase.ps1
